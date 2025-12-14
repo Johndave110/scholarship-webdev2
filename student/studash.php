@@ -5,97 +5,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Navbar</title>
-<link rel="stylesheet" href="../css/styles.css">
-<style>
-.container {
-    max-width: 95%;
-    margin: 20px auto;
-    padding: 0 15px;
-}
-.cards {
-    display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    gap: 15px;
-}
-
-.card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-}
-
-.card h3 {
-    margin-bottom: 8px;
-}
-
-.card p, .card ul {
-    margin: 5px 0;
-}
-
-.card ul {
-    padding-left: 20px;
-}
-</style>
+<title>Student Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
 <body>
 
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Scholarship Icon">
-      Scholarship Portal
-    </div>
-
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-
-    <div class="nav-links">
-        <a href="studash.php" class="active">Dashboard</a>
-        <a href="browsescholarships.php">Browse Scholarships</a>
-        <a href="tracking.php">Tracking</a>
-        <a href="notifications.php">Notifications</a>
-        <a href="studentprofile.php">Profile</a>
-    </div>
-
-
-    <div class="profile">
-    <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
-  </div>
-</nav>
+<?php include_once dirname(__DIR__) . '/includes/nav-student.php'; ?>
 
 <!-- Page content would start here -->
-<div class="container mt-nav">
-    <h2>Student Overview</h2>
-    <div class="cards">
-
-        <!-- Recent Scholarships -->
-        <div class="card" onclick="location.href='browsescholarships.php'">
-            <h3>Scholarships</h3>
-            <p>Click to view all scholarships</p>
+<div class="max-w-7xl mx-auto px-6 mt-8">
+    <h2 class="text-2xl font-bold mb-4">Student Overview</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="rounded-xl bg-white p-6 shadow cursor-pointer" onclick="location.href='browsescholarships.php'">
+            <h3 class="text-lg font-semibold mb-2">Scholarships</h3>
+            <p class="text-slate-600">Click to view all scholarships</p>
         </div>
-
-        <!-- My Applications -->
-        <div class="card" onclick="location.href='tracking.php'">
-            <h3>My Applications</h3>
-            <p>Click to track your applications</p>
+        <div class="rounded-xl bg-white p-6 shadow cursor-pointer" onclick="location.href='tracking.php'">
+            <h3 class="text-lg font-semibold mb-2">My Applications</h3>
+            <p class="text-slate-600">Click to track your applications</p>
         </div>
-
-        <!-- Notifications -->
-        <div class="card" onclick="location.href='notifications.php'">
-            <h3>Notifications</h3>
-            <p>Click to view all notifications</p>
+        <div class="rounded-xl bg-white p-6 shadow cursor-pointer" onclick="location.href='notifications.php'">
+            <h3 class="text-lg font-semibold mb-2">Notifications</h3>
+            <p class="text-slate-600">Click to view all notifications</p>
         </div>
-
     </div>
 </div>
 </body>

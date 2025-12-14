@@ -16,58 +16,51 @@ $profile = $profileObj->viewProfile($_SESSION['user_id']);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Profile</title>
-<link rel="stylesheet" href="../css/styles.css">
-<style></style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
 <body>
 
 <!-- ✅ Shared Navigation -->
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Scholarship Icon">
-      Scholarship Portal
+<nav class="bg-white shadow">
+  <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img class="h-8 w-8" src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Scholarship Icon">
+      <span class="font-semibold text-brand-blue">Scholarship Portal</span>
     </div>
-
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-
-    <div class="nav-links">
-      <a href="studash.php">Dashboard</a>
-      <a href="browsescholarships.php">Browse Scholarships</a>
-      <a href="tracking.php">Tracking</a>
-      <a href="notifications.php">Notifications</a>
-      <a href="studentprofile.php" class="active">Profile</a> <!-- ✅ Highlight current page -->
+    <div class="hidden md:flex items-center gap-6">
+      <a href="studash.php" class="text-slate-700 hover:text-brand-blue">Dashboard</a>
+      <a href="browsescholarships.php" class="text-slate-700 hover:text-brand-blue">Browse Scholarships</a>
+      <a href="tracking.php" class="text-slate-700 hover:text-brand-blue">Tracking</a>
+      <a href="notifications.php" class="text-slate-700 hover:text-brand-blue">Notifications</a>
+      <a href="studentprofile.php" class="text-brand-blue font-medium">Profile</a>
     </div>
-
-    <div class="profile">
-      <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
+    <a href="../global/logout.php" class="inline-flex px-3 py-2 rounded-md bg-brand-blue text-white hover:bg-blue-700">Logout</a>
   </div>
 </nav>
 
 <!-- ✅ Main Profile Section -->
-<div class="profile-container">
-  <h2>My Profile</h2>
+<div class="max-w-3xl mx-auto px-6 mt-8">
+  <h2 class="text-2xl font-bold mb-4">My Profile</h2>
 
   <?php if ($profile): ?>
-    <p><strong>First Name:</strong> <?= htmlspecialchars($profile['firstName']) ?></p>
-    <p><strong>Last Name:</strong> <?= htmlspecialchars($profile['lastName']) ?></p>
-    <p><strong>Middle Name:</strong> <?= htmlspecialchars($profile['middleName'] ?? '') ?></p>
-    <p><strong>Birthdate:</strong> <?= htmlspecialchars($profile['birthdate']) ?></p>
-    <p><strong>Address:</strong> <?= htmlspecialchars($profile['address']) ?></p>
-    <p><strong>Contact Number:</strong> <?= htmlspecialchars($profile['contactNumber']) ?></p>
-    <p><strong>GPA:</strong> <?= htmlspecialchars($profile['gpa']) ?></p>
-    <p><strong>Family Income:</strong> <?= htmlspecialchars($profile['familyIncome']) ?></p>
-    <p><strong>School:</strong> <?= htmlspecialchars($profile['school']) ?></p>
-    <p><strong>Course:</strong> <?= htmlspecialchars($profile['course']) ?></p>
-    <p><strong>Year Level:</strong> <?= htmlspecialchars($profile['yearLevel']) ?></p>
-
-    <div class="buttons">
-      <a href="edit_profile.php" class="btn edit">Edit Profile</a>
-      <a href="studash.php" class="btn back">Back to Dashboard</a>
+    <div class="bg-white rounded-xl shadow p-6 space-y-2">
+      <p><span class="font-semibold">First Name:</span> <?= htmlspecialchars($profile['firstName']) ?></p>
+      <p><span class="font-semibold">Last Name:</span> <?= htmlspecialchars($profile['lastName']) ?></p>
+      <p><span class="font-semibold">Middle Name:</span> <?= htmlspecialchars($profile['middleName'] ?? '') ?></p>
+      <p><span class="font-semibold">Birthdate:</span> <?= htmlspecialchars($profile['birthdate']) ?></p>
+      <p><span class="font-semibold">Address:</span> <?= htmlspecialchars($profile['address']) ?></p>
+      <p><span class="font-semibold">Contact Number:</span> <?= htmlspecialchars($profile['contactNumber']) ?></p>
+      <p><span class="font-semibold">GPA:</span> <?= htmlspecialchars($profile['gpa']) ?></p>
+      <p><span class="font-semibold">Family Income:</span> <?= htmlspecialchars($profile['familyIncome']) ?></p>
+      <p><span class="font-semibold">School:</span> <?= htmlspecialchars($profile['school']) ?></p>
+      <p><span class="font-semibold">Course:</span> <?= htmlspecialchars($profile['course']) ?></p>
+      <p><span class="font-semibold">Year Level:</span> <?= htmlspecialchars($profile['yearLevel']) ?></p>
     </div>
-
+    <div class="mt-4 flex items-center gap-3">
+      <a href="edit_profile.php" class="inline-flex items-center px-5 py-2.5 rounded-md bg-brand-blue text-white hover:bg-blue-700">Edit Profile</a>
+      <a href="studash.php" class="inline-flex items-center px-5 py-2.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">Back to Dashboard</a>
+    </div>
   <?php else: ?>
     <p>No profile found.</p>
   <?php endif; ?>

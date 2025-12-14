@@ -31,79 +31,77 @@ $recentApps = $appObj->getRecentApplications(10);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Reports</title>
-<link rel="stylesheet" href="../css/styles.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
 <!-- Navigation Bar -->
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Admin Icon">
-      Admin Dashboard
+<nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <img class="h-8 w-8" src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Admin Icon">
+            <span class="font-semibold text-brand-blue">Admin Dashboard</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6">
+            <a href="dashboard.php" class="text-slate-700 hover:text-brand-blue">Overview</a>
+            <a href="scholarmanagement.php" class="text-slate-700 hover:text-brand-blue">Scholarship Management</a>
+            <a href="reviewapprove.php" class="text-slate-700 hover:text-brand-blue">Review & Approval</a>
+            <a href="reports.php" class="text-brand-blue font-medium">Reports</a>
+        </div>
+        <a href="../global/logout.php" class="inline-flex px-3 py-2 rounded-md bg-brand-blue text-white hover:bg-blue-700">Logout</a>
     </div>
-
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-
-    <div class="nav-links">
-      <a href="dashboard.php">Overview</a>
-      <a href="scholarmanagement.php">Scholarship Management</a>
-      <a href="reviewapprove.php">Review & Approval</a>
-      <a href="reports.php"  class="active">Reports</a>
-    </div>
-
-    <div class="profile">
-
-    <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
-  </div>
 </nav>
 
-<div class="container mt-nav">
-    <h2>Admin Reports</h2>
+<div class="max-w-7xl mx-auto px-6 mt-8">
+    <h2 class="text-2xl font-bold mb-4">Admin Reports</h2>
 
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-        <div class="card">Total Students: <?= $totalStudents ?></div>
-        <div class="card">Total Scholarships: <?= $totalScholarships ?></div>
-        <div class="card">Total Applications: <?= $totalApplications ?></div>
-        <div class="card">Approved: <?= $totalApproved ?></div>
-        <div class="card">Rejected: <?= $totalRejected ?></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="rounded-xl bg-white p-4 shadow"><div class="text-slate-600 text-sm">Total Students</div><div class="text-2xl font-semibold"><?= $totalStudents ?></div></div>
+        <div class="rounded-xl bg-white p-4 shadow"><div class="text-slate-600 text-sm">Total Scholarships</div><div class="text-2xl font-semibold"><?= $totalScholarships ?></div></div>
+        <div class="rounded-xl bg-white p-4 shadow"><div class="text-slate-600 text-sm">Total Applications</div><div class="text-2xl font-semibold"><?= $totalApplications ?></div></div>
+        <div class="rounded-xl bg-white p-4 shadow"><div class="text-slate-600 text-sm">Approved</div><div class="text-2xl font-semibold text-green-600"><?= $totalApproved ?></div></div>
+        <div class="rounded-xl bg-white p-4 shadow"><div class="text-slate-600 text-sm">Rejected</div><div class="text-2xl font-semibold text-red-600"><?= $totalRejected ?></div></div>
     </div>
 
-    <!-- Recent Applications -->
-    <h3>Recent Applications</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Student Name</th>
-                <th>Scholarship</th>
-                <th>Status</th>
-                <th>Applied At</th>
-                <th>File</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($recentApps as $index => $app): ?>
-            <tr>
-                <td><?= $index + 1 ?></td>
-                <td><?= htmlspecialchars($app['firstName'] . ' ' . $app['lastName']) ?></td>
-                <td><?= htmlspecialchars($app['scholarship_title']) ?></td>
-                <td class="status-<?= strtolower($app['status']) ?>"><?= htmlspecialchars($app['status']) ?></td>
-                <td><?= htmlspecialchars($app['applied_at']) ?></td>
-                <td>
-                    <?php if($app['upload_file']): ?>
-                        <a href="../uploads/applications/<?= htmlspecialchars($app['upload_file']) ?>" target="_blank">View</a>
-                    <?php else: ?>
-                        N/A
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <h3 class="text-xl font-semibold mb-3">Recent Applications</h3>
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+        <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">#</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Student Name</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Scholarship</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Status</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Applied At</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">File</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+                <?php foreach($recentApps as $index => $app): ?>
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 align-top"><?= $index + 1 ?></td>
+                        <td class="px-4 py-3 align-top"><?= htmlspecialchars($app['firstName'] . ' ' . $app['lastName']) ?></td>
+                        <td class="px-4 py-3 align-top"><?= htmlspecialchars($app['scholarship_title']) ?></td>
+                        <td class="px-4 py-3 align-top">
+                            <?php $status = strtolower($app['status']); ?>
+                            <span class="font-semibold <?php if($status==='pending') echo 'text-orange-500'; elseif($status==='approved') echo 'text-green-600'; elseif($status==='rejected') echo 'text-red-600'; ?>">
+                                <?= htmlspecialchars($app['status']) ?>
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 align-top"><?= htmlspecialchars($app['applied_at']) ?></td>
+                        <td class="px-4 py-3 align-top">
+                            <?php if($app['upload_file']): ?>
+                                <a class="text-brand-blue hover:underline" href="../uploads/applications/<?= htmlspecialchars($app['upload_file']) ?>" target="_blank">View</a>
+                            <?php else: ?>
+                                N/A
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 </body>

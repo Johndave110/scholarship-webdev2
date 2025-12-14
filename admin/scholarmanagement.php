@@ -24,65 +24,52 @@ $totalPages = ceil($total / $limit);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scholarship Management</title>
-<link rel="stylesheet" href="../css/styles.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Admin Icon">
-      Admin Dashboard
-    </div>
+<?php include_once dirname(__DIR__) . '/includes/nav-admin.php'; ?>
 
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-
-    <div class="nav-links">
-      <a href="dashboard.php">Overview</a>
-      <a href="scholarmanagement.php" class="active">Scholarship Management</a>
-      <a href="reviewapprove.php">Review & Approval</a>
-      <a href="reports.php">Reports</a>
-    </div>
-
-    <div class="profile">
-
-      <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
+<div class="max-w-7xl mx-auto px-6 mt-8">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold">Scholarship Management</h2>
+    <a href="addscholarship.php" class="inline-flex items-center px-4 py-2 rounded-md bg-brand-green text-white hover:bg-green-600">+ Add Scholarship</a>
   </div>
-</nav>
 
-<div class="container mt-nav">
-  <h2>Scholarship Management</h2>
-  <a href="addscholarship.php" class="add-btn">+ Add Scholarship</a>
-
-    <table>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Requirements</th>
-        <th>Deadline</th>
-        <th>Total Slots</th>
-        <th>Available Slots</th>
-        <th>Min GPA</th>
-        <th>Actions</th>
-    </tr>
-    <?php foreach($scholarships as $sch): ?>
-    <tr>
-        <td><?= htmlspecialchars($sch['title']) ?></td>
-        <td><?= htmlspecialchars($sch['description']) ?></td>
-        <td><?= htmlspecialchars($sch['requirements']) ?></td>
-        <td><?= htmlspecialchars($sch['deadline']) ?></td>
-        <td><?= htmlspecialchars($sch['total_slots']) ?></td>
-        <td><?= htmlspecialchars($sch['available_slots']) ?></td>
-        <td><?= htmlspecialchars($sch['min_gpa']) ?></td>
-        <td>
-            <a href="editscholarship.php?id=<?= $sch['scholarship_id'] ?>">Edit</a> |
-            <a href="deletescholarship.php?id=<?= $sch['scholarship_id'] ?>" onclick="return confirm('Delete this scholarship?')">Delete</a>
-        </td>
-    </tr>
-    <?php endforeach; ?>
+  <div class="overflow-x-auto bg-white rounded-xl shadow">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Title</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Description</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Requirements</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Deadline</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Total Slots</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Available Slots</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Min GPA</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-slate-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        <?php foreach($scholarships as $sch): ?>
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['title']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['description']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['requirements']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['deadline']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['total_slots']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['available_slots']) ?></td>
+          <td class="px-4 py-3 align-top"><?= htmlspecialchars($sch['min_gpa']) ?></td>
+          <td class="px-4 py-3 align-top space-x-2">
+            <a class="text-brand-blue hover:underline" href="editscholarship.php?id=<?= $sch['scholarship_id'] ?>">Edit</a>
+            <a class="text-red-600 hover:underline" href="deletescholarship.php?id=<?= $sch['scholarship_id'] ?>" onclick="return confirm('Delete this scholarship?')">Delete</a>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
     </table>
+  </div>
 </div>
 
 </body>

@@ -3,6 +3,7 @@ require_once "../classes/Profile.php";
 $userObj = new Profile();
 
 $profile = [];
+$users = []; // Initialize users array
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -83,6 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: usernamepass.php?profile_id=" . $profile_id);
             exit();
         } else {
+            // Note: The alert script should be placed inside the HTML <body> for safety
+            // but since we are handling a post request, we'll put it here.
             echo "<script>alert('Error saving profile. Please try again.');</script>";
         }
     }
@@ -94,62 +97,95 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <title>Register • Scholarship Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };
+    </script>
 </head>
-<body class="auth">
-    <form action="" method="post" class="form-grid">  
-        <h1>Register</h1>
-        <label>Fields with <span>*</span> are required</label>
-
-        <label for="firstName">First Name <span>*</span></label>
-        <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($_POST["firstName"] ?? "") ?>">
-        <p class="error"><?= $errors["firstName"] ?? "" ?></p>
-
-        <label for="lastName">Last Name <span>*</span></label>
-        <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($_POST["lastName"] ?? "") ?>">
-        <p class="error"><?= $errors["lastName"] ?? "" ?></p>
-
-        <label for="middleName">Middle Name <span>*</span></label>
-        <input type="text" name="middleName" id="middleName" value="<?= htmlspecialchars($_POST["middleName"] ?? "") ?>">
-        <p class="error"><?= $errors["middleName"] ?? "" ?></p>
-
-        <label for="birthdate">Birthdate <span>*</span></label>
-        <input type="date" name="birthdate" id="birthdate" value="<?= htmlspecialchars($_POST["birthdate"] ?? "") ?>">
-        <p class="error"><?= $errors["birthdate"] ?? "" ?></p>
-
-        <label for="address">Address <span>*</span></label>
-        <input type="text" name="address" id="address" value="<?= htmlspecialchars($_POST["address"] ?? "") ?>">
-        <p class="error"><?= $errors["address"] ?? "" ?></p>
-
-        <label for="contactNumber">Contact Number <span>*</span></label>
-        <input type="text" name="contactNumber" id="contactNumber" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="<?= htmlspecialchars($_POST["contactNumber"] ?? "") ?>">
-        <p class="error"><?= $errors["contactNumber"] ?? "" ?></p>
-
-        <label for="gpa">GPA <span>*</span></label>
-        <input type="number" step="0.01" name="gpa" id="gpa" value="<?= htmlspecialchars($_POST["gpa"] ?? "") ?>">
-        <p class="error"><?= $errors["gpa"] ?? "" ?></p>
-
-        <label for="familyIncome">Family Income <span>*</span></label>
-        <input type="number" step="0.01" name="familyIncome" id="familyIncome" value="<?= htmlspecialchars($_POST["familyIncome"] ?? "") ?>">
-        <p class="error"><?= $errors["familyIncome"] ?? "" ?></p>
-
-        <label for="school">School <span>*</span></label>
-        <input type="text" name="school" id="school" value="<?= htmlspecialchars($_POST["school"] ?? "") ?>">
-        <p class="error"><?= $errors["school"] ?? "" ?></p>
-
-        <label for="course">Course <span>*</span></label>
-        <input type="text" name="course" id="course" value="<?= htmlspecialchars($_POST["course"] ?? "") ?>">
-        <p class="error"><?= $errors["course"] ?? "" ?></p>
-
-        <label for="yearLevel">Year Level <span>*</span></label>
-        <input type="number" name="yearLevel" id="yearLevel" value="<?= htmlspecialchars($_POST["yearLevel"] ?? "") ?>">
-        <p class="error"><?= $errors["yearLevel"] ?? "" ?></p>
-
-        <div class="form-actions">
-            <input type="submit" value="Register" class="btn btn-success">
-            <a href="login.php" class="btn btn-outline">Already have an account?</a>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+    <nav class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <a href="/webdev-2-Scholarship/global/index.php" class="flex items-center gap-2">
+                <span class="h-8 w-8 rounded bg-brand-blue/10 grid place-items-center text-brand-blue font-semibold">SP</span>
+                <span class="font-semibold text-brand-blue">Scholarship Portal</span>
+            </a>
+            <a href="login.php" class="hidden sm:inline-flex px-3 py-2 rounded-md bg-brand-blue text-white hover:bg-blue-700">Sign in</a>
         </div>
-    </form>
+    </nav>
+
+    <main class="max-w-3xl mx-auto mt-10 px-4">
+        <div class="bg-white rounded-xl shadow p-6">
+            <h1 class="text-2xl font-bold mb-1">Create your profile</h1>
+            <p class="text-slate-600 mb-6">Fields with <span class="text-red-600">*</span> are required</p>
+
+            <form action="" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-1">
+                    <label for="firstName" class="block text-sm font-medium">First Name <span class="text-red-600">*</span></label>
+                    <input type="text" name="firstName" id="firstName" value="<?= htmlspecialchars($users["firstName"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["firstName"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="lastName" class="block text-sm font-medium">Last Name <span class="text-red-600">*</span></label>
+                    <input type="text" name="lastName" id="lastName" value="<?= htmlspecialchars($users["lastName"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["lastName"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="middleName" class="block text-sm font-medium">Middle Name <span class="text-red-600">*</span></label>
+                    <input type="text" name="middleName" id="middleName" value="<?= htmlspecialchars($users["middleName"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["middleName"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="birthdate" class="block text-sm font-medium">Birthdate <span class="text-red-600">*</span></label>
+                    <input type="date" name="birthdate" id="birthdate" value="<?= htmlspecialchars($users["birthdate"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["birthdate"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="address" class="block text-sm font-medium">Address <span class="text-red-600">*</span></label>
+                    <input type="text" name="address" id="address" value="<?= htmlspecialchars($users["address"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["address"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="contactNumber" class="block text-sm font-medium">Contact Number <span class="text-red-600">*</span></label>
+                    <input type="text" name="contactNumber" id="contactNumber" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="<?= htmlspecialchars($users["contactNumber"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["contactNumber"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="gpa" class="block text-sm font-medium">GPA <span class="text-red-600">*</span></label>
+                    <input type="number" step="0.01" name="gpa" id="gpa" value="<?= htmlspecialchars($users["gpa"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["gpa"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="familyIncome" class="block text-sm font-medium">Family Income <span class="text-red-600">*</span></label>
+                    <input type="number" step="0.01" name="familyIncome" id="familyIncome" value="<?= htmlspecialchars($users["familyIncome"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["familyIncome"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="school" class="block text-sm font-medium">School <span class="text-red-600">*</span></label>
+                    <input type="text" name="school" id="school" value="<?= htmlspecialchars($users["school"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["school"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="course" class="block text-sm font-medium">Course <span class="text-red-600">*</span></label>
+                    <input type="text" name="course" id="course" value="<?= htmlspecialchars($users["course"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["course"] ?? "" ?></p>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="yearLevel" class="block text-sm font-medium">Year Level <span class="text-red-600">*</span></label>
+                    <input type="number" name="yearLevel" id="yearLevel" value="<?= htmlspecialchars($users["yearLevel"] ?? "") ?>" class="mt-1 p-2 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                    <p class="text-sm text-red-600 mt-1"><?= $errors["yearLevel"] ?? "" ?></p>
+                </div>
+
+                <div class="md:col-span-2 flex items-center gap-3 mt-2">
+                    <button type="submit" class="inline-flex items-center px-5 py-2.5 rounded-md bg-brand-green text-white hover:bg-green-600">Register</button>
+                    <a href="login.php" class="inline-flex items-center px-5 py-2.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">Already have an account?</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="text-center text-slate-500 text-sm mt-10 pb-6">
+        &copy; <?php echo date('Y'); ?> Scholarship Portal
+    </footer>
 </body>
 </html>

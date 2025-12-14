@@ -26,60 +26,29 @@ $notifications = array_filter($applications, function($app){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notifications</title>
-<link rel="stylesheet" href="../css/styles.css">
-<style>
-.notification {
-    background: #fff;
-    padding: 15px;
-    margin: 10px 0;
-    border-left: 5px solid;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.notification.approved { border-color: #28a745; }
-.notification.rejected { border-color: #dc3545; }
-.notification p { margin: 0; }
-</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Scholarship Icon">
-      Scholarship Portal
-    </div>
+<?php include_once dirname(__DIR__) . '/includes/nav-student.php'; ?>
 
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-
-    <div class="nav-links">
-        <a href="studash.php">Dashboard</a>
-        <a href="browsescholarships.php">Browse Scholarships</a>
-        <a href="tracking.php">Tracking</a>
-        <a href="notifications.php"  class="active">Notifications</a>
-        <a href="studentprofile.php">Profile</a>
-    </div>
-
-    <div class="profile">
-    <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
-  </div>
-</nav>
-
-<div style="padding: 20px;">
-    <h2>Notifications</h2>
+<div class="max-w-7xl mx-auto px-6 mt-8">
+    <h2 class="text-2xl font-bold mb-4">Notifications</h2>
 
     <?php if(empty($notifications)): ?>
         <p>No notifications at this time.</p>
     <?php else: ?>
-        <?php foreach($notifications as $notif): ?>
-            <div class="notification <?= strtolower($notif['status']) ?>">
-                <p>
-                    Your application for <strong><?= htmlspecialchars($notif['scholarship_title']) ?></strong> 
-                    has been <strong><?= htmlspecialchars($notif['status']) ?></strong> on <?= htmlspecialchars($notif['applied_at']) ?>.
-                </p>
-            </div>
-        <?php endforeach; ?>
+                <?php foreach($notifications as $notif): ?>
+                    <?php $s = strtolower($notif['status']); ?>
+                    <div class="rounded-xl bg-white p-4 shadow border-l-4 <?php if($s==='approved') echo 'border-green-600'; elseif($s==='rejected') echo 'border-red-600'; ?>">
+                        <p>
+                            Your application for <span class="font-semibold"><?= htmlspecialchars($notif['scholarship_title']) ?></span>
+                            has been <span class="font-semibold <?= $s==='approved' ? 'text-green-600' : 'text-red-600' ?>"><?= htmlspecialchars($notif['status']) ?></span>
+                            on <?= htmlspecialchars($notif['applied_at']) ?>.
+                        </p>
+                    </div>
+                <?php endforeach; ?>
     <?php endif; ?>
 </div>
 

@@ -87,68 +87,60 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Scholarship</title>
-<link rel="stylesheet" href="../css/styles.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828911.png" alt="Admin Icon">
-      Admin Dashboard
-    </div>
+<?php include_once dirname(__DIR__) . '/includes/nav-admin.php'; ?>
 
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
+<div class="max-w-3xl mx-auto px-6 mt-8">
+    <a href="scholarmanagement.php" class="inline-flex items-center text-brand-blue hover:underline">&larr; Back to Scholarships</a>
+    <h2 class="text-2xl font-bold mt-2 mb-4">Edit Scholarship</h2>
 
-    <div class="nav-links">
-      <a href="dashboard.php">Overview</a>
-      <a href="scholarmanagement.php" class="active">Scholarship Management</a>
-      <a href="reviewapprove.php">Review & Approval</a>
-      <a href="reports.php">Reports</a>
-    </div>
+    <form action="" method="post" class="bg-white rounded-xl shadow p-6 space-y-4">
+        <div>
+            <label for="title" class="block text-sm font-medium">Scholarship Title <span class="text-red-600">*</span></label>
+            <input type="text" name="title" id="title" value="<?= htmlspecialchars($scholarship["title"]) ?>" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+            <p class="text-sm text-red-600 mt-1"><?= $errors["title"] ?? "" ?></p>
+        </div>
 
-    <div class="profile">
+        <div>
+            <label for="description" class="block text-sm font-medium">Description <span class="text-red-600">*</span></label>
+            <textarea name="description" id="description" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" rows="4"><?= htmlspecialchars($scholarship["description"]) ?></textarea>
+            <p class="text-sm text-red-600 mt-1"><?= $errors["description"] ?? "" ?></p>
+        </div>
 
-    <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
-  </div>
-</nav>
+        <div>
+            <label for="requirements" class="block text-sm font-medium">Document Requirements <span class="text-red-600">*</span></label>
+            <textarea name="requirements" id="requirements" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" rows="4"><?= htmlspecialchars($scholarship["requirements"]) ?></textarea>
+            <p class="text-sm text-red-600 mt-1"><?= $errors["requirements"] ?? "" ?></p>
+        </div>
 
-<div class="container mt-nav">
-    <a href="scholarmanagement.php" class="back-btn">Back to Scholarships</a>
-    <h2>Edit Scholarship</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="min_gpa" class="block text-sm font-medium">Minimum GPA Requirement <span class="text-red-600">*</span></label>
+                <input type="number" step="0.01" name="min_gpa" id="min_gpa" value="<?= htmlspecialchars($scholarship["min_gpa"]) ?>" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                <p class="text-sm text-red-600 mt-1"><?= $errors["min_gpa"] ?? "" ?></p>
+            </div>
+            <div>
+                <label for="deadline" class="block text-sm font-medium">Deadline <span class="text-red-600">*</span></label>
+                <input type="date" name="deadline" id="deadline" value="<?= htmlspecialchars($scholarship["deadline"]) ?>" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                <p class="text-sm text-red-600 mt-1"><?= $errors["deadline"] ?? "" ?></p>
+            </div>
+            <div>
+                <label for="total_slots" class="block text-sm font-medium">Total Slots <span class="text-red-600">*</span></label>
+                <input type="number" name="total_slots" id="total_slots" value="<?= htmlspecialchars($scholarship["total_slots"]) ?>" class="mt-1 w-full rounded-md border-slate-300 focus:border-brand-blue focus:ring-brand-blue" />
+                <p class="text-sm text-red-600 mt-1"><?= $errors["total_slots"] ?? "" ?></p>
+            </div>
+        </div>
 
-    <form action="" method="post">
-        <label for="title">Scholarship Title <span>*</span></label>
-        <input type="text" name="title" id="title" value="<?= htmlspecialchars($scholarship["title"]) ?>">
-        <p class="error"><?= $errors["title"] ?? "" ?></p>
-
-        <label for="description">Description <span>*</span></label>
-        <textarea name="description" id="description"><?= htmlspecialchars($scholarship["description"]) ?></textarea>
-        <p class="error"><?= $errors["description"] ?? "" ?></p>
-
-        <label for="requirements">Document Requirements <span>*</span></label>
-        <textarea name="requirements" id="requirements"><?= htmlspecialchars($scholarship["requirements"]) ?></textarea>
-        <p class="error"><?= $errors["requirements"] ?? "" ?></p>
-
-        <label for="min_gpa">Minimum GPA Requirement <span>*</span></label>
-        <input type="number" step="0.01" name="min_gpa" id="min_gpa" value="<?= htmlspecialchars($scholarship["min_gpa"]) ?>">
-        <p class="error"><?= $errors["min_gpa"] ?? "" ?></p>
-
-        <label for="deadline">Deadline <span>*</span></label>
-        <input type="date" name="deadline" id="deadline" value="<?= htmlspecialchars($scholarship["deadline"]) ?>">
-        <p class="error"><?= $errors["deadline"] ?? "" ?></p>
-
-        <label for="total_slots">Total Slots <span>*</span></label>
-        <input type="number" name="total_slots" id="total_slots" value="<?= htmlspecialchars($scholarship["total_slots"]) ?>">
-        <p class="error"><?= $errors["total_slots"] ?? "" ?></p>
-
-        <div class="form-actions">
-            <input type="submit" value="Update Scholarship">
+        <div>
+            <button type="submit" class="inline-flex items-center px-5 py-2.5 rounded-md bg-brand-blue text-white hover:bg-blue-700">Update Scholarship</button>
         </div>
     </form>
 </div>
+
 </body>
 <script src="../global/scripts.min.js"></script>
 </html>

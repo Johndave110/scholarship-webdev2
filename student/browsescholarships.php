@@ -84,72 +84,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['scholarship_id'])) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Browse Scholarships</title>
-<link rel="stylesheet" href="../css/styles.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { theme: { extend: { colors: { brand: { blue: '#1e40af', green: '#16a34a', dark: '#0f172a' } } } } };</script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-<nav>
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Scholarship Icon">
-      Scholarship Portal
-    </div>
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-    <div class="nav-links">
-        <a href="studash.php">Dashboard</a>
-        <a href="browsescholarships.php" class="active">Browse Scholarships</a>
-        <a href="tracking.php">Tracking</a>
-        <a href="notifications.php">Notifications</a>
-        <a href="studentprofile.php">Profile</a>
-    </div>
-    <div class="profile">
-    <a href="../global/logout.php" class="logout">Logout</a>
-    </div>
-  </div>
-</nav>
+<?php include_once dirname(__DIR__) . '/includes/nav-student.php'; ?>
 
-<div style="padding:20px;">
-    <h2>Available Scholarships</h2>
+<div class="max-w-7xl mx-auto px-6 mt-8">
+        <h2 class="text-2xl font-bold mb-4">Available Scholarships</h2>
     <?php if (empty($scholarships)) : ?>
-        <p>No scholarships available.</p>
+                <p>No scholarships available.</p>
     <?php else: ?>
-        <?php foreach ($scholarships as $sch) : ?>
-            <div class="scholarship-card">
-                <h3><?= htmlspecialchars($sch['title']) ?></h3>
-                <p><strong>Description:</strong> <?= htmlspecialchars($sch['description']) ?></p>
-                <p><strong>Requirements:</strong> <?= htmlspecialchars($sch['requirements']) ?></p>
-                <p><strong>Minimum GPA:</strong> <?= number_format($sch['min_gpa'],2) ?></p>
-                <p><strong>Deadline:</strong> <?= htmlspecialchars($sch['deadline']) ?></p>
-                <button class="apply-btn" onclick="openModal(<?= $sch['scholarship_id'] ?>, <?= $sch['min_gpa'] ?>)">Apply</button>
-            </div>
-        <?php endforeach; ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <?php foreach ($scholarships as $sch) : ?>
+                        <div class="rounded-xl bg-white p-6 shadow">
+                            <h3 class="text-lg font-semibold mb-2"><?= htmlspecialchars($sch['title']) ?></h3>
+                            <p class="text-slate-700"><span class="font-medium">Description:</span> <?= htmlspecialchars($sch['description']) ?></p>
+                            <p class="text-slate-700"><span class="font-medium">Requirements:</span> <?= htmlspecialchars($sch['requirements']) ?></p>
+                            <p class="text-slate-700"><span class="font-medium">Minimum GPA:</span> <?= number_format($sch['min_gpa'],2) ?></p>
+                            <p class="text-slate-700"><span class="font-medium">Deadline:</span> <?= htmlspecialchars($sch['deadline']) ?></p>
+                            <div class="mt-4">
+                                <button class="inline-flex items-center px-4 py-2 rounded-md bg-brand-green text-white hover:bg-green-600" onclick="openModal(<?= $sch['scholarship_id'] ?>, <?= $sch['min_gpa'] ?>)">Apply</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
     <?php endif; ?>
 
     <!-- Pagination -->
-    <?php if ($totalPages > 1) : ?>
-        <div class="pagination">
-            <?php for ($i=1; $i<=$totalPages; $i++): ?>
-                <?php if($i==$page): ?>
-                    <span class="current"><?= $i ?></span>
-                <?php else: ?>
-                    <a href="?page=<?= $i ?>"><?= $i ?></a>
-                <?php endif; ?>
-            <?php endfor; ?>
-        </div>
-    <?php endif; ?>
+        <?php if ($totalPages > 1) : ?>
+            <div class="mt-6 flex items-center gap-2">
+                <?php for ($i=1; $i<=$totalPages; $i++): ?>
+                    <?php if($i==$page): ?>
+                        <span class="px-3 py-1 rounded bg-brand-blue text-white"><?= $i ?></span>
+                    <?php else: ?>
+                        <a class="px-3 py-1 rounded border border-slate-300 hover:bg-slate-50" href="?page=<?= $i ?>"><?= $i ?></a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
 </div>
 
 <!-- Modal -->
-<div id="applyModal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h3>Upload Document</h3>
-        <form id="applyForm" method="post" enctype="multipart/form-data">
-            <input type="file" name="upload_file" id="upload_file" required>
-            <p id="fileName" style="font-size:0.9em;color:#555;margin-bottom:10px;"></p>
+<div id="applyModal" class="fixed inset-0 hidden bg-black/50 items-center justify-center">
+    <div class="bg-white rounded-xl shadow p-6 w-full max-w-md">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-semibold">Upload Document</h3>
+            <button class="text-slate-500 hover:text-slate-700" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="applyForm" method="post" enctype="multipart/form-data" class="space-y-3">
+            <input type="file" name="upload_file" id="upload_file" required class="w-full" />
+            <p id="fileName" class="text-sm text-slate-600"></p>
             <input type="hidden" name="scholarship_id" id="scholarship_id">
-            <button type="submit">Submit Application</button>
+            <button type="submit" class="inline-flex items-center px-4 py-2 rounded-md bg-brand-blue text-white hover:bg-blue-700">Submit Application</button>
         </form>
     </div>
 </div>
@@ -164,12 +152,16 @@ function openModal(scholarshipId, minGPA){
         return;
     }
     document.getElementById('scholarship_id').value = scholarshipId;
-    document.getElementById('applyModal').style.display = 'flex';
+    const m = document.getElementById('applyModal');
+    m.classList.remove('hidden');
+    m.classList.add('flex');
 }
 
 // Close modal
 function closeModal(){
-    document.getElementById('applyModal').style.display = 'none';
+    const m = document.getElementById('applyModal');
+    m.classList.add('hidden');
+    m.classList.remove('flex');
     document.getElementById('fileName').textContent = '';
     document.getElementById('upload_file').value = '';
 }
